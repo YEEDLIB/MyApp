@@ -23,12 +23,10 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["nsis", "portable"], 
-    "windows": {
-      "portable": {
-        "active": true 
-      }
-    },
+    "targets": "portable", // KHALADKA 1aad oo la saxay: Noqo string, ma ahan array.
+    
+    // KHALADKA 2aad oo la saxay: Waxaan ka saarnay qeybta "windows" ee portable-ka
+    // Si kastaba ha ahaatee, waxaad u baahan kartaa qaabeynta icons-ka:
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
