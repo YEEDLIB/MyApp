@@ -1,10 +1,14 @@
 name: Build Tauri App (Windows Only)
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+      # ✅ Haddii aad rabto auto-run, uncomment labada hoose:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # ✅ Manual only
+  workflow_dispatch:
 
 jobs:
   build-windows:
