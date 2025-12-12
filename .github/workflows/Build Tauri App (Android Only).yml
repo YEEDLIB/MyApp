@@ -1,49 +1,51 @@
-name: Build Tauri Android APK
+name: Build Tauri App (Android APK)
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  # ✅ Haddii aad rabto auto-run, uncomment labada hoose:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # ✅ Manual only
+  workflow_dispatch:
 
 jobs:
   build-android:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        shell: bash
+        working-directory: myapp   # ✅ Haddii mashruucaaga ku jiro folder kale, beddel magaca
+
     steps:
-      # 1. Checkout code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Rust
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-
-      # 3. Setup Node.js (frontend)
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
 
-      # 4. Install dependencies
-      - name: Install dependencies
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install frontend dependencies
         run: npm install
 
-      # 5. Setup Android SDK
+      # ✅ Ku rakib Android SDK & NDK
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      # 6. Build frontend
       - name: Build frontend
         run: npm run build
 
-      # 7. Build Tauri Android APK
-      - name: Build Tauri Android
+      - name: Build Tauri App (Android APK)
         run: npm run tauri android build
 
-      # 8. Upload APK artifact
-      - name: Upload APK
+      - name: Upload APK Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tauri-apk
-          path: src-tauri/gen/android/app/build/outputs/apk/
+          name: tauri-android-apk
+          path: myapp/src-tauri/gen/android/app/build/outputs/apk/
