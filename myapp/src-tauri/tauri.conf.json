@@ -23,11 +23,10 @@
   },
   "bundle": {
     "active": true,
-    // Halkan ayaan ku darnay "portable" si uu u dhismo app aan rakibid lahayn.
     "targets": ["nsis", "portable"], 
     "windows": {
       "portable": {
-        "active": true // Wuxuu hubinayaa in qeybta portable ay shaqeyneyso
+        "active": true 
       }
     },
     "icon": [
