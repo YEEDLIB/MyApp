@@ -13,6 +13,7 @@ jobs:
     defaults:
       run:
         shell: bash
+        working-directory: MyApp   # ✅ KU BADAL HADDII FOLDER-KAAGA KALE YAHAY
 
     steps:
       - name: Checkout repository
@@ -23,7 +24,6 @@ jobs:
         with:
           node-version: 18
 
-      # ✅ Windows already has Rust installed
       - name: Verify Rust
         run: |
           rustc --version
@@ -35,6 +35,7 @@ jobs:
       - name: Build Tauri App (Windows)
         uses: tauri-apps/tauri-action@v0
         with:
+          projectPath: MyApp   # ✅ KU BADAL HADDII FOLDER-KAAGA KALE YAHAY
           tagName: app-v__VERSION__
           releaseName: "App v__VERSION__"
           releaseBody: "Windows build from GitHub Actions"
@@ -45,4 +46,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: tauri-windows-build
-          path: src-tauri/target/release/bundle/
+          path: MyApp/src-tauri/target/release/bundle/
