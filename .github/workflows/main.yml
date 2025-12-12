@@ -1,0 +1,43 @@
+name: Build Tauri App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    # Node.js setup
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Cache Node modules
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+    - run: npm install
+
+    # Rust setup
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+        profile: minimal
+
+    # Build Tauri app
+    - run: npm run tauri build
+
+    # Upload artifacts
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tauri-build
+        path: src-tauri/target/release/bundle/
