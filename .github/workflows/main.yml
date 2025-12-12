@@ -1,10 +1,11 @@
 name: Build Tauri App (Windows Only)
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+  workflow_dispatch:   # ✅ Manual only
 
 jobs:
   build-windows:
@@ -13,7 +14,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: myapp   # ✅ Haddii mashruucaaga ku jiro folder kale, beddel magaca
+        # working-directory: myapp   # ✅ Uncomment haddii mashruucaaga folder kale ku jiro
 
     steps:
       - name: Checkout repository
@@ -24,7 +25,6 @@ jobs:
         with:
           node-version: 18
 
-      # ✅ Windows already has Rust installed
       - name: Verify Rust
         run: |
           rustc --version
@@ -36,10 +36,14 @@ jobs:
       - name: Build Tauri App (Windows)
         uses: tauri-apps/tauri-action@v0
         with:
-          projectPath: myapp   # ✅ Haddii folder-kaaga kale yahay, beddel
+          # projectPath: myapp   # ✅ Uncomment haddii mashruucaaga folder kale ku jiro
+          releaseDraft: false
+          prerelease: false
 
       - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: tauri-windows-build
-          path: myapp/src-tauri/target/release/bundle/
+          path: src-tauri/target/release/bundle/
+          # Haddii mashruucaaga folder kale ku jiro:
+          # path: myapp/src-tauri/target/release/bundle/
