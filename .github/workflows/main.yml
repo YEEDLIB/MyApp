@@ -24,12 +24,14 @@ jobs:
           node-version: 18
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
 
       - name: Install frontend dependencies
         run: npm install
 
-      # Linux dependencies (GTK, WebKitGTK)
       - name: Install Linux dependencies
         if: matrix.platform == 'ubuntu-latest'
         run: |
