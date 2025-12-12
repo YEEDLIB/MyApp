@@ -23,15 +23,20 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+      # ✅ Linux & macOS: Install Rust
+      - name: Install Rust (Linux/macOS)
+        if: matrix.platform != 'windows-latest'
+        uses: dtolnay/rust-toolchain@stable
+
+      # ✅ Windows: Rust already installed → just print version
+      - name: Use preinstalled Rust (Windows)
+        if: matrix.platform == 'windows-latest'
+        run: rustc --version
 
       - name: Install frontend dependencies
         run: npm install
 
+      # ✅ Linux dependencies
       - name: Install Linux dependencies
         if: matrix.platform == 'ubuntu-latest'
         run: |
