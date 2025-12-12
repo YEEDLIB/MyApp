@@ -1,4 +1,4 @@
-name: Build Tauri App
+name: Build Tauri App (Windows Only)
 
 on:
   push:
@@ -7,12 +7,12 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        platform: [ubuntu-latest, macos-latest, windows-latest]
+  build-windows:
+    runs-on: windows-latest
 
-    runs-on: ${{ matrix.platform }}
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout repository
@@ -23,46 +23,26 @@ jobs:
         with:
           node-version: 18
 
-      # ✅ Linux & macOS: Install Rust
-      - name: Install Rust (Linux/macOS)
-        if: matrix.platform != 'windows-latest'
-        uses: dtolnay/rust-toolchain@stable
-
-      # ✅ Windows: Rust already installed → just print version
-      - name: Use preinstalled Rust (Windows)
-        if: matrix.platform == 'windows-latest'
-        run: rustc --version
+      # ✅ Windows already has Rust installed
+      - name: Verify Rust
+        run: |
+          rustc --version
+          cargo --version
 
       - name: Install frontend dependencies
         run: npm install
 
-      # ✅ Linux dependencies
-      - name: Install Linux dependencies
-        if: matrix.platform == 'ubuntu-latest'
-        run: |
-          sudo apt update
-          sudo apt install -y \
-            libwebkit2gtk-4.0-dev \
-            build-essential \
-            curl \
-            wget \
-            file \
-            libssl-dev \
-            libgtk-3-dev \
-            libayatana-appindicator3-dev \
-            librsvg2-dev
-
-      - name: Build Tauri App
+      - name: Build Tauri App (Windows)
         uses: tauri-apps/tauri-action@v0
         with:
           tagName: app-v__VERSION__
           releaseName: "App v__VERSION__"
-          releaseBody: "Automatic build from GitHub Actions"
+          releaseBody: "Windows build from GitHub Actions"
           releaseDraft: false
           prerelease: false
 
-      - name: Upload artifacts
+      - name: Upload Windows Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: tauri-build-${{ matrix.platform }}
+          name: tauri-windows-build
           path: src-tauri/target/release/bundle/
