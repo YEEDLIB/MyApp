@@ -23,7 +23,7 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": ["nsis", "msi", "zip"],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
@@ -31,5 +31,20 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ]
+    /*
+    👉 MSIX config commented out:
+    "msix": {
+      "certificatePath": "path/to/cert.pfx",
+      "certificatePassword": "YOUR_PASSWORD"
+    }
+
+    ✨ Explanation:
+    - NSIS (.exe installer): Standard Windows installer with step-by-step wizard.
+    - MSI (.msi installer): Microsoft Installer format, widely used in enterprise environments.
+    - ZIP: Simple compressed archive containing the app, useful for portable distribution.
+    - Portable exe: Automatically produced in `target/release/myapp.exe` even if not listed here.
+    - MSIX: Modern Windows packaging format, requires a valid certificate to sign. 
+      If you uncomment the block above and provide a certificate, Tauri will generate MSIX installers.
+    */
   }
 }
