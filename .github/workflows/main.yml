@@ -1,35 +1,49 @@
-{
-  "$schema": "https://schema.tauri.app/config/2",
-  "productName": "myapp",
-  "version": "0.1.0",
-  "identifier": "com.myappw.myapp",
-  "build": {
-    "beforeDevCommand": "npm run dev",
-    "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm run build",
-    "frontendDist": "../dist"
-  },
-  "app": {
-    "windows": [
-      {
-        "title": "myapp",
-        "width": 800,
-        "height": 600
-      }
-    ],
-    "security": {
-      "csp": null
-    }
-  },
-  "bundle": {
-    "active": true,
-    "targets": ["nsis", "msi", "msix"],
-    "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
-    ]
-  }
-}
+name: Build Tauri App (Windows Only)
+
+on:
+      # ✅ Haddii aad rabto auto-run, uncomment labada hoose:
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
+
+  # ✅ Manual only
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: myapp   # ✅ Haddii mashruucaaga ku jiro folder kale, beddel magaca
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # ✅ Windows already has Rust installed
+      - name: Verify Rust
+        run: |
+          rustc --version
+          cargo --version
+
+      - name: Install frontend dependencies
+        run: npm install
+
+      - name: Build Tauri App (Windows)
+        uses: tauri-apps/tauri-action@v0
+        with:
+          projectPath: myapp   # ✅ Haddii folder-kaaga kale yahay, beddel
+
+      - name: Upload Windows Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-windows-build
+          path: myapp/src-tauri/target/release/bundle/
